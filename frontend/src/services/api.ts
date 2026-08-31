@@ -28,7 +28,7 @@ const FALLBACK_TRACTS = [
     hvi_score: 88.4,
     risk_level: "Extreme" as const,
     geometry: {
-      type: "Polygon" as const,
+      type: "Polygon",
       coordinates: [[
         [-112.085, 33.445],
         [-112.065, 33.445],
@@ -50,7 +50,7 @@ const FALLBACK_TRACTS = [
     hvi_score: 76.2,
     risk_level: "Extreme" as const,
     geometry: {
-      type: "Polygon" as const,
+      type: "Polygon",
       coordinates: [[
         [-112.065, 33.445],
         [-112.045, 33.445],
@@ -72,7 +72,7 @@ const FALLBACK_TRACTS = [
     hvi_score: 48.5,
     risk_level: "Moderate" as const,
     geometry: {
-      type: "Polygon" as const,
+      type: "Polygon",
       coordinates: [[
         [-112.065, 33.460],
         [-112.045, 33.460],
@@ -93,8 +93,7 @@ const FALLBACK_COOLING_CENTERS = [
     longitude: -112.0738,
     capacity: 250,
     current_occupancy: 142,
-    is_open: true,
-    operating_hours: "08:00 - 20:00",
+    is_active: true,
     features: ["Hydration Station", "Medical Triage", "Pet Friendly", "Misting Zone"]
   },
   {
@@ -105,8 +104,7 @@ const FALLBACK_COOLING_CENTERS = [
     longitude: -112.0772,
     capacity: 120,
     current_occupancy: 88,
-    is_open: true,
-    operating_hours: "09:00 - 19:00",
+    is_active: true,
     features: ["Hydration Station", "Air Conditioned Shelter"]
   }
 ];
@@ -128,9 +126,10 @@ const FALLBACK_WORKSITES: WorksiteStatus[] = [
     metrics: {
       temperature_c: 42.4,
       relative_humidity_pct: 22,
-      solar_irradiance_wm2: 890,
       heat_index_c: 45.1,
+      wet_bulb_temp_c: 28.5,
       wbgt_c: 32.8,
+      solar_irradiance_wm2: 890,
       air_quality_idx: 68
     },
     advisory: {
@@ -139,9 +138,11 @@ const FALLBACK_WORKSITES: WorksiteStatus[] = [
       work_minutes_per_hour: 20,
       rest_minutes_per_hour: 40,
       recommended_water_liters_per_hour: 1.0,
-      summary_advisory: "DANGER: Extreme WBGT heat load. Implement 20m work / 40m shade rest intervals.",
-      ppe_guidance: "Mandatory evaporative cooling neck wraps, UV hardhat brims, and electrolyte supplementation."
+      ppe_guidance: "Mandatory evaporative cooling neck wraps, UV hardhat brims, and electrolyte supplementation.",
+      stop_work_mandatory: false,
+      summary_advisory: "DANGER: Extreme WBGT heat load. Implement 20m work / 40m shade rest intervals."
     },
+    last_evaluated_at: new Date().toISOString(),
     is_threshold_exceeded: true
   },
   {
@@ -160,9 +161,10 @@ const FALLBACK_WORKSITES: WorksiteStatus[] = [
     metrics: {
       temperature_c: 39.8,
       relative_humidity_pct: 28,
-      solar_irradiance_wm2: 780,
       heat_index_c: 41.5,
+      wet_bulb_temp_c: 26.2,
       wbgt_c: 30.4,
+      solar_irradiance_wm2: 780,
       air_quality_idx: 55
     },
     advisory: {
@@ -171,34 +173,38 @@ const FALLBACK_WORKSITES: WorksiteStatus[] = [
       work_minutes_per_hour: 30,
       rest_minutes_per_hour: 30,
       recommended_water_liters_per_hour: 0.9,
-      summary_advisory: "WARNING: High heat stress. 30m work / 30m shaded recovery required.",
-      ppe_guidance: "High-visibility ventilated vests, polarized safety eyewear, active hydration tracking."
+      ppe_guidance: "High-visibility ventilated vests, polarized safety eyewear, active hydration tracking.",
+      stop_work_mandatory: false,
+      summary_advisory: "WARNING: High heat stress. 30m work / 30m shaded recovery required."
     },
+    last_evaluated_at: new Date().toISOString(),
     is_threshold_exceeded: true
   }
 ];
 
 const FALLBACK_CROPS: CropProfile[] = [
   {
-    crop_id: "crop-tomato",
+    id: "crop-tomato",
     name: "Field Tomatoes",
     category: "Horticulture",
     base_temp_c: 10.0,
+    max_temp_c: 38.0,
     optimal_temp_range_c: [20.0, 29.0],
-    critical_heat_threshold_c: 35.0,
     gdd_to_maturity: 1400.0,
-    kc_mid: 1.15,
+    critical_heat_threshold_c: 35.0,
+    daily_water_need_mm: 6.5,
     description: "Sensitive to blossom drop and pollen sterility when daytime microclimate surface temperatures exceed 35°C."
   },
   {
-    crop_id: "crop-wheat",
+    id: "crop-wheat",
     name: "Durum Wheat",
     category: "Cereal Grain",
     base_temp_c: 4.4,
+    max_temp_c: 35.0,
     optimal_temp_range_c: [15.0, 24.0],
-    critical_heat_threshold_c: 32.0,
     gdd_to_maturity: 1800.0,
-    kc_mid: 1.05,
+    critical_heat_threshold_c: 32.0,
+    daily_water_need_mm: 5.0,
     description: "Vulnerable to forced maturity and grain shriveling under severe diurnal heat spikes during the grain-filling stage."
   }
 ];
@@ -209,22 +215,24 @@ const FALLBACK_PLOTS: AgriculturalPlot[] = [
     name: "South Mountain Agro-Park Parcel A",
     crop_id: "crop-tomato",
     crop_name: "Field Tomatoes",
+    planting_date: "2026-03-01",
     area_hectares: 18.5,
-    soil_type: "Sandy Loam",
-    irrigation_system: "Subsurface Drip",
     latitude: 33.365,
-    longitude: -112.065
+    longitude: -112.065,
+    soil_type: "Sandy Loam",
+    irrigation_system: "Subsurface Drip"
   },
   {
     id: "plot-02",
     name: "Salt River Agricultural Basin Parcel 4",
     crop_id: "crop-wheat",
     crop_name: "Durum Wheat",
+    planting_date: "2026-02-15",
     area_hectares: 34.0,
-    soil_type: "Clay Loam",
-    irrigation_system: "Center Pivot Sprinkler",
     latitude: 33.395,
-    longitude: -112.145
+    longitude: -112.145,
+    soil_type: "Clay Loam",
+    irrigation_system: "Center Pivot Sprinkler"
   }
 ];
 
@@ -239,18 +247,14 @@ export const api = {
       });
       if (res.ok) return await res.json();
     } catch (e) {
-      console.warn('API route /api/vulnerability/hvi-map fallback used', e);
+      console.warn('API fallback used', e);
     }
     return {
+      region_name: "Phoenix Urban Heat Basin",
+      timestamp: new Date().toISOString(),
+      mode: "demo",
       tracts: FALLBACK_TRACTS,
       cooling_centers: FALLBACK_COOLING_CENTERS,
-      weights_used: weights || {
-        temperature_weight: 0.3,
-        elderly_weight: 0.2,
-        low_income_weight: 0.2,
-        canopy_deficit_weight: 0.15,
-        no_ac_weight: 0.15
-      },
       overall_mean_temp_c: 41.2,
       high_risk_tract_count: 2
     };
@@ -261,7 +265,7 @@ export const api = {
       const res = await fetch(`${API_BASE}/vulnerability/cooling-gaps`);
       if (res.ok) return await res.json();
     } catch (e) {
-      console.warn('API route fallback used', e);
+      console.warn('API fallback used', e);
     }
     return [
       {
@@ -281,12 +285,13 @@ export const api = {
       const res = await fetch(`${API_BASE}/vulnerability/outreach-plan`);
       if (res.ok) return await res.json();
     } catch (e) {
-      console.warn('API route fallback used', e);
+      console.warn('API fallback used', e);
     }
     return {
       plan_id: "OUTREACH-PHX-DEMO",
       generated_at: new Date().toISOString(),
       total_population_at_risk: 14850,
+      active_cooling_shelters: 2,
       priority_dispatch_queue: [
         {
           rank: 1,
@@ -297,7 +302,8 @@ export const api = {
           estimated_vulnerable_residents: 2540,
           assigned_team: "Phoenix Civic Resilience Team Alpha",
           priority: "IMMEDIATE",
-          recommended_action: "Door-to-door senior checks & bottled water distribution"
+          recommended_action: "Door-to-door senior checks & bottled water distribution",
+          transit_distance_to_center_km: 1.8
         }
       ]
     };
@@ -330,11 +336,13 @@ export const api = {
         alert_id: "alt-01",
         site_id: "site-01",
         site_name: "Light Rail Extension - Central Ave Corridor",
-        severity: "EMERGENCY",
-        message: "WBGT exceeded 32.5°C threshold. Immediate 40m shade rest mandatory.",
-        wbgt_c: 32.8,
         timestamp: new Date().toISOString(),
-        acknowledged: false
+        severity: "EMERGENCY",
+        wbgt_c: 32.8,
+        heat_index_c: 45.1,
+        message: "WBGT exceeded 32.5°C threshold. Immediate 40m shade rest mandatory.",
+        acknowledged: false,
+        dispatched_channels: ["SMS", "Push", "Digital Signboard"]
       }
     ];
   },
@@ -382,48 +390,53 @@ export const api = {
     return {
       plot: FALLBACK_PLOTS[0],
       crop: FALLBACK_CROPS[0],
+      current_temp_c: 38.5,
       accumulated_gdd: 958.0,
-      projected_harvest_date: "2026-05-18",
       gdd_progress_pct: 68.4,
+      projected_harvest_date: "2026-05-18",
+      heat_stress_risk: "Moderate",
       daily_et0_total_mm: 6.84,
       recommended_irrigation_volume_liters: 72500,
       optimal_irrigation_windows: [
         {
-          hour: 5,
           hour_label: "05:00",
+          hour: 5,
           temperature_c: 24.2,
+          relative_humidity_pct: 45,
           solar_irradiance_wm2: 45,
           et0_mm_per_hour: 0.12,
-          is_recommended_window: true,
           evaporation_loss_risk: "Low",
+          is_recommended_window: true,
           efficiency_score: 95
         },
         {
-          hour: 6,
           hour_label: "06:00",
+          hour: 6,
           temperature_c: 26.5,
+          relative_humidity_pct: 40,
           solar_irradiance_wm2: 180,
           et0_mm_per_hour: 0.22,
-          is_recommended_window: true,
           evaporation_loss_risk: "Low",
+          is_recommended_window: true,
           efficiency_score: 92
         },
         {
-          hour: 14,
           hour_label: "14:00",
+          hour: 14,
           temperature_c: 42.8,
+          relative_humidity_pct: 18,
           solar_irradiance_wm2: 920,
           et0_mm_per_hour: 0.88,
-          is_recommended_window: false,
           evaporation_loss_risk: "Extreme",
+          is_recommended_window: false,
           efficiency_score: 35
         }
       ],
       gdd_forecast: [
-        { day_number: 10, accumulated_gdd: 210, target_maturity_gdd: 1400, crop_stage: "Vegetative Growth" },
-        { day_number: 30, accumulated_gdd: 640, target_maturity_gdd: 1400, crop_stage: "Vegetative Growth" },
-        { day_number: 45, accumulated_gdd: 958, target_maturity_gdd: 1400, crop_stage: "Flowering & Fruit Set" },
-        { day_number: 65, accumulated_gdd: 1400, target_maturity_gdd: 1400, crop_stage: "Harvest Maturity" }
+        { date: "2026-03-10", day_number: 10, daily_gdd: 21, accumulated_gdd: 210, target_maturity_gdd: 1400, crop_stage: "Vegetative Growth" },
+        { date: "2026-03-30", day_number: 30, daily_gdd: 22, accumulated_gdd: 640, target_maturity_gdd: 1400, crop_stage: "Vegetative Growth" },
+        { date: "2026-04-15", day_number: 45, daily_gdd: 24, accumulated_gdd: 958, target_maturity_gdd: 1400, crop_stage: "Flowering & Fruit Set" },
+        { date: "2026-05-05", day_number: 65, daily_gdd: 25, accumulated_gdd: 1400, target_maturity_gdd: 1400, crop_stage: "Harvest Maturity" }
       ]
     };
   },
@@ -435,10 +448,11 @@ export const api = {
       if (res.ok) return await res.json();
     } catch (e) {}
     return {
+      is_configured: false,
       mode: "demo",
-      has_valid_key: false,
-      masked_key: null,
+      masked_key: "None",
       plan_tier: "Demo Simulator Mode",
+      connection_healthy: true,
       status_message: "Operating on realistic synthetic microclimate telemetry."
     };
   },
@@ -453,10 +467,11 @@ export const api = {
       if (res.ok) return await res.json();
     } catch (e) {}
     return {
+      is_configured: !!apiKey,
       mode: forceMode === 'live' ? 'live' : 'demo',
-      has_valid_key: !!apiKey,
-      masked_key: apiKey ? `${apiKey.slice(0, 4)}••••${apiKey.slice(-4)}` : null,
+      masked_key: apiKey ? `${apiKey.slice(0, 4)}••••${apiKey.slice(-4)}` : "None",
       plan_tier: forceMode === 'live' ? "FortyGuard Enterprise v1" : "Demo Simulator Mode",
+      connection_healthy: true,
       status_message: forceMode === 'live' ? "FortyGuard API Key verified." : "Operating in Demo Simulator Mode."
     };
   }
