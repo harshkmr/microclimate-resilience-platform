@@ -151,7 +151,7 @@ export const App: React.FC = () => {
       isDark ? 'bg-zinc-950 text-zinc-50' : 'bg-zinc-50 text-zinc-900'
     }`}>
       
-      {/* Top Navbar with Theme Switcher */}
+      {/* Top Navbar with Theme Switcher & Responsive Tabs */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -162,20 +162,20 @@ export const App: React.FC = () => {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-6 pb-12 sm:pb-8">
         
         {/* Error Banner */}
         {error && (
-          <div className={`p-4 border rounded-xl flex items-center justify-between text-sm ${
+          <div className={`p-3.5 sm:p-4 border rounded-xl flex items-center justify-between text-xs sm:text-sm ${
             isDark ? 'bg-zinc-900 border-red-900/60 text-red-300' : 'bg-red-50 border-red-200 text-red-800'
           }`}>
-            <div className="flex items-center gap-2.5">
-              <AlertCircle className="w-5 h-5 text-red-500" />
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
               <span>{error}</span>
             </div>
             <button
               onClick={loadInitialData}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 flex-shrink-0 ${
                 isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border-zinc-700' : 'bg-white hover:bg-zinc-100 text-zinc-800 border-zinc-300'
               }`}
             >
@@ -185,15 +185,16 @@ export const App: React.FC = () => {
         )}
 
         {/* Global Interactive GIS Map Section */}
-        <section className="space-y-3">
+        <section className="space-y-2 sm:space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className={`text-xs font-semibold uppercase tracking-wider ${
+            <h2 className={`text-[11px] sm:text-xs font-semibold uppercase tracking-wider ${
               isDark ? 'text-zinc-400' : 'text-zinc-500'
             }`}>
               FortyGuard Microclimate GIS Spatial Layer
             </h2>
-            <div className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-              Region: <span className="font-medium">Phoenix Metro Urban Heat Basin</span>
+            <div className={`text-[11px] sm:text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+              <span className="hidden sm:inline">Region: </span>
+              <span className="font-medium">Phoenix Metro</span>
             </div>
           </div>
           
@@ -217,11 +218,11 @@ export const App: React.FC = () => {
 
         {/* Active Operational Dashboard Module */}
         {isLoading ? (
-          <div className={`p-16 flex flex-col items-center justify-center space-y-3 border rounded-xl ${
+          <div className={`p-12 sm:p-16 flex flex-col items-center justify-center space-y-3 border rounded-xl ${
             isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
           }`}>
             <RefreshCw className="w-6 h-6 text-blue-500 animate-spin" />
-            <p className={`text-sm font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            <p className={`text-xs sm:text-sm font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
               Synchronizing FortyGuard Microclimate Telemetry...
             </p>
           </div>
@@ -267,11 +268,11 @@ export const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className={`border-t py-6 text-center text-xs transition-colors ${
+      <footer className={`border-t py-4 sm:py-6 px-4 text-center text-[11px] sm:text-xs transition-colors ${
         isDark ? 'bg-zinc-950 border-zinc-800/80 text-zinc-500' : 'bg-white border-zinc-200 text-zinc-500'
       }`}>
-        FortyGuard Heat-Resilience & Microclimate Decision Platform &bull; Government & Environment Edition &bull; 
-        <span className={`ml-1 ${isDark ? 'text-zinc-400' : 'text-zinc-700'}`}>Powered by FortyGuard Microclimate APIs</span>
+        FortyGuard Heat-Resilience & Microclimate Decision Platform &bull; 
+        <span className={`ml-1 ${isDark ? 'text-zinc-400' : 'text-zinc-700'}`}>Powered by FortyGuard APIs</span>
       </footer>
 
       {/* Settings Modal */}

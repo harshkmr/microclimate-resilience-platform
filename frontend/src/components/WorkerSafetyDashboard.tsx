@@ -112,32 +112,32 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
     : 'bg-zinc-50 border-zinc-200';
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-6">
       
       {/* Top Warning Banner if Threshold Exceeded */}
       {activeSite?.is_threshold_exceeded && (
-        <div className={`p-4 border rounded-xl flex items-center justify-between gap-4 shadow-md ${
+        <div className={`p-4 border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shadow-md ${
           isDark ? 'bg-zinc-900 border-red-900/80 text-zinc-50' : 'bg-red-50 border-red-200 text-red-900'
         }`}>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-red-500/10 text-red-500 rounded-lg border border-red-500/20">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="p-2.5 bg-red-500/10 text-red-500 rounded-lg border border-red-500/20 flex-shrink-0 mt-0.5 sm:mt-0">
               <Flame className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-semibold text-sm flex items-center gap-2 tracking-tight">
+              <div className="font-semibold text-xs sm:text-sm flex items-center gap-2 tracking-tight flex-wrap">
                 <span>OSHA HEAT THRESHOLD EXCEEDED</span>
-                <span className="text-xs px-2 py-0.5 bg-red-500 text-white rounded-full font-mono font-medium">
+                <span className="text-[10px] sm:text-xs px-2 py-0.5 bg-red-500 text-white rounded-full font-mono font-medium">
                   {activeSite.advisory.risk_level} Risk Tier
                 </span>
               </div>
               <p className={`text-xs mt-1 ${isDark ? 'text-zinc-400' : 'text-red-700'}`}>
-                {activeSite.site.name} &bull; WBGT Index: <strong className="font-mono">{activeSite.metrics.wbgt_c}°C</strong> | Heat Index: <strong className="font-mono text-orange-500">{activeSite.metrics.heat_index_c}°C</strong>
+                {activeSite.site.name} &bull; WBGT: <strong className="font-mono">{activeSite.metrics.wbgt_c}°C</strong> | Heat Idx: <strong className="font-mono text-orange-500">{activeSite.metrics.heat_index_c}°C</strong>
               </p>
             </div>
           </div>
           <button
             onClick={handleBroadcastAlert}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500/40 flex items-center gap-1.5 whitespace-nowrap"
+            className="w-full sm:w-auto px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500/40 flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0"
           >
             <Radio className="w-4 h-4" />
             Broadcast Siren
@@ -155,40 +155,40 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
             <span className="font-mono">{worksiteStatuses.length} Sites</span>
           </div>
 
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
             {worksiteStatuses.map((ws) => {
               const isSelected = activeSite?.site.id === ws.site.id;
               return (
                 <div
                   key={ws.site.id}
                   onClick={() => onSelectWorksite(ws)}
-                  className={`p-4 rounded-xl border cursor-pointer transition-colors focus:outline-none ${
+                  className={`p-3.5 sm:p-4 rounded-xl border cursor-pointer transition-colors focus:outline-none ${
                     isSelected
                       ? isDark ? 'bg-zinc-800/90 border-zinc-700 shadow-sm' : 'bg-blue-50/70 border-blue-300 shadow-sm'
                       : cardCls
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="font-medium text-sm">{ws.site.name}</div>
-                      <div className={`text-xs mt-0.5 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                    <div className="min-w-0">
+                      <div className="font-medium text-xs sm:text-sm truncate">{ws.site.name}</div>
+                      <div className={`text-xs mt-0.5 truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
                         {ws.site.category} &bull; {ws.site.crew_size} workers
                       </div>
                     </div>
                     <span 
-                      className="px-2 py-0.5 rounded text-[10px] font-semibold text-white"
+                      className="px-2 py-0.5 rounded text-[10px] font-semibold text-white flex-shrink-0"
                       style={{ backgroundColor: ws.advisory.color_code }}
                     >
                       {ws.advisory.risk_level}
                     </span>
                   </div>
 
-                  <div className={`mt-3 pt-2.5 border-t flex items-center justify-between text-xs font-mono ${
+                  <div className={`mt-3 pt-2.5 border-t flex items-center justify-between text-[11px] sm:text-xs font-mono ${
                     isDark ? 'border-zinc-800 text-zinc-400' : 'border-zinc-200 text-zinc-600'
                   }`}>
                     <span>WBGT: <strong>{ws.metrics.wbgt_c}°C</strong></span>
                     <span>Heat Idx: <strong className="text-orange-500">{ws.metrics.heat_index_c}°C</strong></span>
-                    <span>Rest: <strong className="text-blue-500">{ws.advisory.rest_minutes_per_hour}m/hr</strong></span>
+                    <span>Rest: <strong className="text-blue-500">{ws.advisory.rest_minutes_per_hour}m/h</strong></span>
                   </div>
                 </div>
               );
@@ -201,67 +201,67 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
           <div className="lg:col-span-8 space-y-4">
             
             {/* Real-time Environmental Metrics Tile */}
-            <div className={`border rounded-xl p-6 transition-colors space-y-4 ${cardCls}`}>
-              <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
+            <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-4 ${cardCls}`}>
+              <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg border border-blue-500/20">
+                  <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg border border-blue-500/20 flex-shrink-0">
                     <HardHat className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-base tracking-tight">{activeSite.site.name}</h3>
+                    <h3 className="font-semibold text-sm sm:text-base tracking-tight">{activeSite.site.name}</h3>
                     <p className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                      Supervisor: <strong>{activeSite.site.supervisor_name}</strong> ({activeSite.site.contact_phone}) &bull; Shift: {activeSite.site.active_shift_start} - {activeSite.site.active_shift_end}
+                      Lead: <strong>{activeSite.site.supervisor_name}</strong> &bull; Shift: {activeSite.site.active_shift_start} - {activeSite.site.active_shift_end}
                     </p>
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <div className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>FortyGuard Telemetry</div>
-                  <div className="text-xs font-mono text-green-500 font-medium">Synchronized</div>
+                <div className="sm:text-right flex sm:flex-col items-center sm:items-end justify-between text-xs">
+                  <div className={isDark ? 'text-zinc-400' : 'text-zinc-500'}>FortyGuard Telemetry</div>
+                  <div className="font-mono text-green-500 font-medium">Synchronized</div>
                 </div>
               </div>
 
               {/* Environmental Telemetry Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
-                <div className={`p-3 border rounded-lg ${subCardCls}`}>
-                  <div className={`text-[11px] uppercase font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>WBGT Temp</div>
-                  <div className="text-lg font-semibold font-mono text-red-500 mt-1">{activeSite.metrics.wbgt_c}°C</div>
-                  <div className="text-[10px] text-zinc-500">NIOSH Std</div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 text-center">
+                <div className={`p-2.5 sm:p-3 border rounded-lg ${subCardCls}`}>
+                  <div className={`text-[10px] sm:text-[11px] uppercase font-semibold truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>WBGT Temp</div>
+                  <div className="text-base sm:text-lg font-semibold font-mono text-red-500 mt-0.5 sm:mt-1">{activeSite.metrics.wbgt_c}°C</div>
+                  <div className="text-[9px] sm:text-[10px] text-zinc-500">NIOSH Std</div>
                 </div>
 
-                <div className={`p-3 border rounded-lg ${subCardCls}`}>
-                  <div className={`text-[11px] uppercase font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Heat Index</div>
-                  <div className="text-lg font-semibold font-mono text-orange-500 mt-1">{activeSite.metrics.heat_index_c}°C</div>
-                  <div className="text-[10px] text-zinc-500">Apparent</div>
+                <div className={`p-2.5 sm:p-3 border rounded-lg ${subCardCls}`}>
+                  <div className={`text-[10px] sm:text-[11px] uppercase font-semibold truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Heat Index</div>
+                  <div className="text-base sm:text-lg font-semibold font-mono text-orange-500 mt-0.5 sm:mt-1">{activeSite.metrics.heat_index_c}°C</div>
+                  <div className="text-[9px] sm:text-[10px] text-zinc-500">Apparent</div>
                 </div>
 
-                <div className={`p-3 border rounded-lg ${subCardCls}`}>
-                  <div className={`text-[11px] uppercase font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Air Temp</div>
-                  <div className="text-lg font-semibold font-mono mt-1">{activeSite.metrics.temperature_c}°C</div>
-                  <div className="text-[10px] text-zinc-500">Ambient</div>
+                <div className={`p-2.5 sm:p-3 border rounded-lg ${subCardCls}`}>
+                  <div className={`text-[10px] sm:text-[11px] uppercase font-semibold truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Air Temp</div>
+                  <div className="text-base sm:text-lg font-semibold font-mono mt-0.5 sm:mt-1">{activeSite.metrics.temperature_c}°C</div>
+                  <div className="text-[9px] sm:text-[10px] text-zinc-500">Ambient</div>
                 </div>
 
-                <div className={`p-3 border rounded-lg ${subCardCls}`}>
-                  <div className={`text-[11px] uppercase font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Humidity</div>
-                  <div className="text-lg font-semibold font-mono text-blue-500 mt-1">{activeSite.metrics.relative_humidity_pct}%</div>
-                  <div className="text-[10px] text-zinc-500">Relative</div>
+                <div className={`p-2.5 sm:p-3 border rounded-lg ${subCardCls}`}>
+                  <div className={`text-[10px] sm:text-[11px] uppercase font-semibold truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Humidity</div>
+                  <div className="text-base sm:text-lg font-semibold font-mono text-blue-500 mt-0.5 sm:mt-1">{activeSite.metrics.relative_humidity_pct}%</div>
+                  <div className="text-[9px] sm:text-[10px] text-zinc-500">Relative</div>
                 </div>
 
-                <div className={`p-3 border rounded-lg ${subCardCls}`}>
-                  <div className={`text-[11px] uppercase font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Solar GHI</div>
-                  <div className="text-lg font-semibold font-mono text-amber-500 mt-1">{activeSite.metrics.solar_irradiance_wm2}</div>
-                  <div className="text-[10px] text-zinc-500">W/m²</div>
+                <div className={`p-2.5 sm:p-3 border rounded-lg ${subCardCls}`}>
+                  <div className={`text-[10px] sm:text-[11px] uppercase font-semibold truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Solar GHI</div>
+                  <div className="text-base sm:text-lg font-semibold font-mono text-amber-500 mt-0.5 sm:mt-1">{activeSite.metrics.solar_irradiance_wm2}</div>
+                  <div className="text-[9px] sm:text-[10px] text-zinc-500">W/m²</div>
                 </div>
 
-                <div className={`p-3 border rounded-lg ${subCardCls}`}>
-                  <div className={`text-[11px] uppercase font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Air Quality</div>
-                  <div className="text-lg font-semibold font-mono text-green-500 mt-1">{activeSite.metrics.air_quality_idx}</div>
-                  <div className="text-[10px] text-zinc-500">US AQI</div>
+                <div className={`p-2.5 sm:p-3 border rounded-lg ${subCardCls}`}>
+                  <div className={`text-[10px] sm:text-[11px] uppercase font-semibold truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Air Quality</div>
+                  <div className="text-base sm:text-lg font-semibold font-mono text-green-500 mt-0.5 sm:mt-1">{activeSite.metrics.air_quality_idx}</div>
+                  <div className="text-[9px] sm:text-[10px] text-zinc-500">US AQI</div>
                 </div>
               </div>
 
               {/* Advisory & PPE Directive */}
-              <div className={`p-4 border rounded-lg flex items-start gap-3 ${subCardCls}`}>
+              <div className={`p-3.5 sm:p-4 border rounded-lg flex items-start gap-2.5 sm:gap-3 ${subCardCls}`}>
                 <ShieldAlert className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
                 <div className="text-xs space-y-1">
                   <div className="font-semibold">{activeSite.advisory.summary_advisory}</div>
@@ -276,14 +276,14 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               
               {/* Interactive OSHA Work-Rest Timer */}
-              <div className={`border rounded-xl p-6 transition-colors space-y-4 flex flex-col justify-between ${cardCls}`}>
+              <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-4 flex flex-col justify-between ${cardCls}`}>
                 <div>
                   <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-blue-500" />
-                      <h4 className="font-semibold text-sm tracking-tight">OSHA Work-Rest Interval</h4>
+                      <h4 className="font-semibold text-xs sm:text-sm tracking-tight">OSHA Work-Rest Interval</h4>
                     </div>
-                    <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
+                    <span className={`text-[11px] font-mono px-2 py-0.5 rounded border ${
                       isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-300' : 'bg-zinc-100 border-zinc-300 text-zinc-700'
                     }`}>
                       {activeSite.advisory.work_minutes_per_hour}m / {activeSite.advisory.rest_minutes_per_hour}m
@@ -291,7 +291,7 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                   </div>
 
                   {/* Mode Toggles */}
-                  <div className="grid grid-cols-2 gap-2 mt-4">
+                  <div className="grid grid-cols-2 gap-2 mt-3.5">
                     <button
                       onClick={() => setTimerMode('work')}
                       className={`py-2 rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
@@ -315,8 +315,8 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                   </div>
 
                   {/* Digital Clock Display */}
-                  <div className="text-center my-6">
-                    <div className="font-mono text-5xl font-bold tracking-tight">
+                  <div className="text-center my-4 sm:my-6">
+                    <div className="font-mono text-4xl sm:text-5xl font-bold tracking-tight">
                       {formatTime(secondsRemaining)}
                     </div>
                     <p className={`text-xs mt-1 capitalize ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
@@ -326,57 +326,59 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                 </div>
 
                 {/* Timer Controls */}
-                <div className="flex items-center justify-center gap-3">
-                  <button
-                    onClick={() => setIsTimerRunning(!isTimerRunning)}
-                    className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
-                      isTimerRunning ? 'bg-amber-600 hover:bg-amber-500' : 'bg-blue-500 hover:bg-blue-600'
-                    }`}
-                  >
-                    {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                    <span>{isTimerRunning ? 'Pause Timer' : 'Start Interval'}</span>
-                  </button>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center gap-3">
+                    <button
+                      onClick={() => setIsTimerRunning(!isTimerRunning)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-xs font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
+                        isTimerRunning ? 'bg-amber-600 hover:bg-amber-500' : 'bg-blue-500 hover:bg-blue-600'
+                      }`}
+                    >
+                      {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                      <span>{isTimerRunning ? 'Pause Timer' : 'Start Interval'}</span>
+                    </button>
 
-                  <button
-                    onClick={() => {
-                      setIsTimerRunning(false);
-                      const minutes = timerMode === 'work' 
-                        ? activeSite.advisory.work_minutes_per_hour 
-                        : activeSite.advisory.rest_minutes_per_hour;
-                      setSecondsRemaining(Math.max(1, minutes) * 60);
-                    }}
-                    className={`p-2 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
-                      isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 border-zinc-300'
-                    }`}
-                    title="Reset Timer"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* Hydration Requirement Pill */}
-                <div className={`p-3 border rounded-lg flex items-center justify-between text-xs mt-2 ${subCardCls}`}>
-                  <div className="flex items-center gap-1.5">
-                    <Droplet className="w-4 h-4 text-blue-500" />
-                    <span>Prescribed Hydration:</span>
+                    <button
+                      onClick={() => {
+                        setIsTimerRunning(false);
+                        const minutes = timerMode === 'work' 
+                          ? activeSite.advisory.work_minutes_per_hour 
+                          : activeSite.advisory.rest_minutes_per_hour;
+                        setSecondsRemaining(Math.max(1, minutes) * 60);
+                      }}
+                      className={`p-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 flex-shrink-0 ${
+                        isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border-zinc-700' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-700 border-zinc-300'
+                      }`}
+                      title="Reset Timer"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                    </button>
                   </div>
-                  <strong className="font-mono">{activeSite.advisory.recommended_water_liters_per_hour} L / hr</strong>
+
+                  {/* Hydration Requirement Pill */}
+                  <div className={`p-2.5 sm:p-3 border rounded-lg flex items-center justify-between text-xs ${subCardCls}`}>
+                    <div className="flex items-center gap-1.5">
+                      <Droplet className="w-4 h-4 text-blue-500" />
+                      <span>Prescribed Hydration:</span>
+                    </div>
+                    <strong className="font-mono">{activeSite.advisory.recommended_water_liters_per_hour} L / hr</strong>
+                  </div>
                 </div>
 
               </div>
 
               {/* Crew Alert Dispatch & Siren */}
-              <div className={`border rounded-xl p-6 transition-colors space-y-4 flex flex-col justify-between ${cardCls}`}>
+              <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-4 flex flex-col justify-between ${cardCls}`}>
                 <div>
                   <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                     <div className="flex items-center gap-2">
                       <Radio className="w-4 h-4 text-red-500" />
-                      <h4 className="font-semibold text-sm tracking-tight">Crew Siren Broadcast</h4>
+                      <h4 className="font-semibold text-xs sm:text-sm tracking-tight">Crew Siren Broadcast</h4>
                     </div>
                     <span className={`text-[10px] border px-2 py-0.5 rounded font-mono ${
                       isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-400' : 'bg-zinc-100 border-zinc-300 text-zinc-600'
                     }`}>
-                      SMS &bull; Push &bull; Signboard
+                      SMS &bull; Push &bull; Sign
                     </span>
                   </div>
 
@@ -384,7 +386,7 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                     Dispatch real-time warning push notifications and SMS mandates to all {activeSite.site.crew_size} workers.
                   </p>
 
-                  <div className="mt-3">
+                  <div className="mt-2.5">
                     <textarea
                       rows={3}
                       value={broadcastMsg}
@@ -400,8 +402,8 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                     <div className={`mt-2 p-2.5 border rounded-lg text-xs flex items-center gap-2 ${
                       isDark ? 'bg-zinc-950 border-green-800 text-green-400' : 'bg-green-50 border-green-200 text-green-700'
                     }`}>
-                      <CheckCircle2 className="w-4 h-4 text-green-500" />
-                      <span>Alert dispatched to {activeSite.site.crew_size} workers successfully.</span>
+                      <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                      <span>Alert dispatched to {activeSite.site.crew_size} workers.</span>
                     </div>
                   )}
                 </div>
@@ -409,7 +411,7 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                 <button
                   onClick={handleBroadcastAlert}
                   disabled={isBroadcasting}
-                  className="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500/40 flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500/40 flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
                 >
                   <Radio className="w-4 h-4" />
                   <span>{isBroadcasting ? 'Broadcasting...' : 'Broadcast Crew Alert'}</span>
@@ -419,11 +421,11 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
             </div>
 
             {/* Alert Logs Table */}
-            <div className={`border rounded-xl p-6 transition-colors space-y-4 ${cardCls}`}>
+            <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-4 ${cardCls}`}>
               <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                 <div className="flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 text-orange-500" />
-                  <h4 className="font-semibold text-sm tracking-tight">Recent Heat Safety Incidents</h4>
+                  <h4 className="font-semibold text-xs sm:text-sm tracking-tight">Recent Safety Incidents</h4>
                 </div>
                 <span className="text-xs font-mono text-zinc-400">{alerts.length} Incidents</span>
               </div>
@@ -432,14 +434,14 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                 {alerts.map((alt) => (
                   <div
                     key={alt.alert_id}
-                    className={`p-3.5 rounded-lg border flex items-center justify-between gap-3 text-xs transition-colors ${
+                    className={`p-3 sm:p-3.5 rounded-lg border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs transition-colors ${
                       alt.acknowledged
                         ? isDark ? 'bg-zinc-950 border-zinc-800 text-zinc-400' : 'bg-zinc-50 border-zinc-200 text-zinc-500'
                         : isDark ? 'bg-zinc-950 border-red-900/60 text-red-300' : 'bg-red-50 border-red-200 text-red-800'
                     }`}
                   >
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2 font-medium">
+                      <div className="flex items-center gap-2 font-medium flex-wrap">
                         <span>{alt.site_name}</span>
                         <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
                           alt.severity === 'EMERGENCY' ? 'bg-red-500 text-white' : 'bg-orange-500 text-white'
@@ -457,8 +459,8 @@ export const WorkerSafetyDashboard: React.FC<WorkerSafetyDashboardProps> = ({
                       <p className={`text-[11px] ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{alt.message}</p>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      <div className="text-right text-[11px] font-mono text-zinc-400">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0 border-t sm:border-t-0">
+                      <div className="text-[11px] font-mono text-zinc-400">
                         WBGT {alt.wbgt_c}°C
                       </div>
                       {!alt.acknowledged && (

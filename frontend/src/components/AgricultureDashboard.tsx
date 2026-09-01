@@ -57,60 +57,60 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
     : 'bg-zinc-50 border-zinc-200';
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 sm:space-y-6">
       
       {/* Top Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         
-        <div className={`border rounded-xl p-6 transition-colors ${cardCls}`}>
-          <div className={`flex items-center justify-between mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-            <span className="text-xs font-semibold uppercase tracking-wider">Crop Phenology Stage</span>
-            <Sprout className="w-4 h-4 text-green-500" />
+        <div className={`border rounded-xl p-4 sm:p-6 transition-colors ${cardCls}`}>
+          <div className={`flex items-center justify-between mb-1.5 sm:mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Crop Phenology Stage</span>
+            <Sprout className="w-4 h-4 text-green-500 flex-shrink-0" />
           </div>
-          <div className="text-2xl font-semibold tracking-tight truncate">
+          <div className="text-xl sm:text-2xl font-semibold tracking-tight truncate">
             {analytics?.gdd_forecast.find(f => f.day_number === 45)?.crop_stage || 'Flowering & Fruit Set'}
           </div>
-          <div className="text-xs text-green-500 mt-2 font-medium font-mono">
-            {analytics?.gdd_progress_pct || 68.4}% GDD Maturity ({analytics?.accumulated_gdd} / {currentCrop?.gdd_to_maturity} units)
+          <div className="text-xs text-green-500 mt-1.5 font-medium font-mono truncate">
+            {analytics?.gdd_progress_pct || 68.4}% GDD ({analytics?.accumulated_gdd} / {currentCrop?.gdd_to_maturity} u)
           </div>
         </div>
 
-        <div className={`border rounded-xl p-6 transition-colors ${cardCls}`}>
-          <div className={`flex items-center justify-between mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-            <span className="text-xs font-semibold uppercase tracking-wider">Projected Harvest</span>
-            <Calendar className="w-4 h-4 text-blue-500" />
+        <div className={`border rounded-xl p-4 sm:p-6 transition-colors ${cardCls}`}>
+          <div className={`flex items-center justify-between mb-1.5 sm:mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Projected Harvest</span>
+            <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
           </div>
-          <div className="text-3xl font-semibold tracking-tight font-mono">
+          <div className="text-2xl sm:text-3xl font-semibold tracking-tight font-mono">
             {analytics?.projected_harvest_date || '2026-05-18'}
           </div>
-          <div className={`text-xs mt-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-            Based on microclimate thermal unit velocity
+          <div className={`text-xs mt-1.5 truncate ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            Thermal velocity model
           </div>
         </div>
 
-        <div className={`border rounded-xl p-6 transition-colors ${cardCls}`}>
-          <div className={`flex items-center justify-between mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-            <span className="text-xs font-semibold uppercase tracking-wider">Daily ET₀ Evaporation</span>
-            <Sun className="w-4 h-4 text-amber-500" />
+        <div className={`border rounded-xl p-4 sm:p-6 transition-colors ${cardCls}`}>
+          <div className={`flex items-center justify-between mb-1.5 sm:mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Daily ET₀ Loss</span>
+            <Sun className="w-4 h-4 text-amber-500 flex-shrink-0" />
           </div>
-          <div className="text-3xl font-semibold tracking-tight font-mono">
+          <div className="text-2xl sm:text-3xl font-semibold tracking-tight font-mono">
             {analytics?.daily_et0_total_mm || 6.84} mm/day
           </div>
-          <div className="text-xs text-amber-500 mt-2">
-            Penman-Monteith solar microclimate model
+          <div className="text-xs text-amber-500 mt-1.5 truncate">
+            Penman-Monteith solar model
           </div>
         </div>
 
-        <div className={`border rounded-xl p-6 transition-colors ${cardCls}`}>
-          <div className={`flex items-center justify-between mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-            <span className="text-xs font-semibold uppercase tracking-wider">Recommended Irrigation</span>
-            <Droplet className="w-4 h-4 text-blue-500" />
+        <div className={`border rounded-xl p-4 sm:p-6 transition-colors ${cardCls}`}>
+          <div className={`flex items-center justify-between mb-1.5 sm:mb-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider">Target Irrigation</span>
+            <Droplet className="w-4 h-4 text-blue-500 flex-shrink-0" />
           </div>
-          <div className="text-3xl font-semibold tracking-tight font-mono">
-            {analytics ? (analytics.recommended_irrigation_volume_liters / 1000).toFixed(1) : '72.5'}k Liters
+          <div className="text-2xl sm:text-3xl font-semibold tracking-tight font-mono">
+            {analytics ? (analytics.recommended_irrigation_volume_liters / 1000).toFixed(1) : '72.5'}k L
           </div>
-          <div className="text-xs text-blue-500 mt-2 font-medium">
-            For {currentPlot?.area_hectares} ha parcel ({currentPlot?.irrigation_system})
+          <div className="text-xs text-blue-500 mt-1.5 font-medium truncate">
+            For {currentPlot?.area_hectares} ha parcel
           </div>
         </div>
 
@@ -123,31 +123,31 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
         <div className="lg:col-span-4 space-y-4">
           
           {/* Plot List */}
-          <div className={`border rounded-xl p-6 transition-colors space-y-3 ${cardCls}`}>
+          <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-3 ${cardCls}`}>
             <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-              <div className="flex items-center gap-2 font-semibold text-sm tracking-tight">
+              <div className="flex items-center gap-2 font-semibold text-xs sm:text-sm tracking-tight">
                 <Waves className="w-4 h-4 text-green-500" />
                 <span>Agricultural Plots</span>
               </div>
               <span className={`text-xs font-mono ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>{plots.length} Parcels</span>
             </div>
 
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
               {plots.map((p) => {
                 const isSelected = currentPlot?.id === p.id;
                 return (
                   <div
                     key={p.id}
                     onClick={() => onSelectPlot(p)}
-                    className={`p-3.5 rounded-lg border cursor-pointer transition-colors focus:outline-none ${
+                    className={`p-3 sm:p-3.5 rounded-lg border cursor-pointer transition-colors focus:outline-none ${
                       isSelected
                         ? isDark ? 'bg-zinc-800 border-zinc-700 shadow-sm' : 'bg-green-50 border-green-300 shadow-sm'
                         : subCardCls
                     }`}
                   >
                     <div className="flex items-center justify-between font-medium text-xs">
-                      <span>{p.name}</span>
-                      <span className="text-green-500 font-semibold">{p.crop_name}</span>
+                      <span className="truncate pr-1">{p.name}</span>
+                      <span className="text-green-500 font-semibold flex-shrink-0">{p.crop_name}</span>
                     </div>
                     <div className={`flex justify-between text-[11px] mt-1 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
                       <span>{p.area_hectares} ha &bull; {p.soil_type}</span>
@@ -161,7 +161,7 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
 
           {/* Crop Biological Specs Card */}
           {currentCrop && (
-            <div className={`border rounded-xl p-6 transition-colors space-y-3 text-xs ${cardCls}`}>
+            <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-3 text-xs ${cardCls}`}>
               <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                 <div className="font-semibold text-sm tracking-tight flex items-center gap-2">
                   <Sprout className="w-4 h-4 text-green-500" />
@@ -207,43 +207,43 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
         <div className="lg:col-span-8 space-y-4">
           
           {/* Chart Card */}
-          <div className={`border rounded-xl p-6 transition-colors space-y-4 ${cardCls}`}>
+          <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-4 ${cardCls}`}>
             
-            <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-              <div className="flex space-x-2">
+            <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none w-full sm:w-auto">
                 <button
                   onClick={() => setActiveChartTab('irrigation')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
                     activeChartTab === 'irrigation'
-                      ? isDark ? 'bg-zinc-800 text-zinc-50 border border-zinc-700' : 'bg-zinc-100 text-zinc-900 border border-zinc-300'
+                      ? isDark ? 'bg-zinc-800 text-zinc-50 border border-zinc-700 font-semibold' : 'bg-zinc-100 text-zinc-900 border border-zinc-300 font-semibold'
                       : isDark ? 'text-zinc-400 hover:text-zinc-200' : 'text-zinc-600 hover:text-zinc-900'
                   }`}
                 >
-                  24-Hour ET₀ & Evaporation Profile
+                  24-Hour ET₀ Profile
                 </button>
 
                 <button
                   onClick={() => setActiveChartTab('gdd')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
+                  className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${
                     activeChartTab === 'gdd'
-                      ? isDark ? 'bg-zinc-800 text-zinc-50 border border-zinc-700' : 'bg-zinc-100 text-zinc-900 border border-zinc-300'
+                      ? isDark ? 'bg-zinc-800 text-zinc-50 border border-zinc-700 font-semibold' : 'bg-zinc-100 text-zinc-900 border border-zinc-300 font-semibold'
                       : isDark ? 'text-zinc-400 hover:text-zinc-200' : 'text-zinc-600 hover:text-zinc-900'
                   }`}
                 >
-                  Cumulative GDD Phenology Curve
+                  GDD Phenology Curve
                 </button>
               </div>
 
-              <span className={`text-xs font-mono hidden sm:inline ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                FortyGuard Microclimate Model
+              <span className={`text-[11px] font-mono hidden sm:inline ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                Microclimate Model
               </span>
             </div>
 
             {/* Chart Container */}
-            <div className="h-64 w-full">
+            <div className="h-60 sm:h-72 w-full">
               {activeChartTab === 'irrigation' && analytics && (
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={analytics.optimal_irrigation_windows}>
+                  <AreaChart data={analytics.optimal_irrigation_windows} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="et0Grad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35}/>
@@ -255,9 +255,9 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#27272a' : '#e4e4e7'} />
-                    <XAxis dataKey="hour_label" stroke={isDark ? '#71717a' : '#a1a1aa'} textAnchor="end" tick={{ fontSize: 11 }} />
-                    <YAxis yAxisId="left" stroke="#3b82f6" tick={{ fontSize: 11 }} label={{ value: 'ET₀ (mm/hr)', angle: -90, position: 'insideLeft', fill: '#3b82f6', fontSize: 10 }} />
-                    <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" tick={{ fontSize: 11 }} label={{ value: 'Temp (°C)', angle: 90, position: 'insideRight', fill: '#f59e0b', fontSize: 10 }} />
+                    <XAxis dataKey="hour_label" stroke={isDark ? '#71717a' : '#a1a1aa'} textAnchor="end" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="left" stroke="#3b82f6" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" tick={{ fontSize: 10 }} />
                     <RechartsTooltip
                       contentStyle={{ 
                         backgroundColor: isDark ? '#18181b' : '#ffffff', 
@@ -267,18 +267,18 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
                         color: isDark ? '#fafafa' : '#09090b'
                       }}
                     />
-                    <Area yAxisId="left" type="monotone" dataKey="et0_mm_per_hour" name="Evapotranspiration (mm/hr)" stroke="#3b82f6" fill="url(#et0Grad)" />
-                    <Area yAxisId="right" type="monotone" dataKey="temperature_c" name="Microclimate Temp (°C)" stroke="#f59e0b" fill="url(#tempGrad)" />
+                    <Area yAxisId="left" type="monotone" dataKey="et0_mm_per_hour" name="ET₀ (mm/hr)" stroke="#3b82f6" fill="url(#et0Grad)" />
+                    <Area yAxisId="right" type="monotone" dataKey="temperature_c" name="Temp (°C)" stroke="#f59e0b" fill="url(#tempGrad)" />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
 
               {activeChartTab === 'gdd' && analytics && (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={analytics.gdd_forecast}>
+                  <LineChart data={analytics.gdd_forecast} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#27272a' : '#e4e4e7'} />
-                    <XAxis dataKey="day_number" label={{ value: 'Days Since Planting', position: 'insideBottom', offset: -5, fill: isDark ? '#71717a' : '#a1a1aa', fontSize: 11 }} stroke={isDark ? '#71717a' : '#a1a1aa'} tick={{ fontSize: 11 }} />
-                    <YAxis stroke="#22c55e" label={{ value: 'Accumulated GDD', angle: -90, position: 'insideLeft', fill: '#22c55e', fontSize: 10 }} tick={{ fontSize: 11 }} />
+                    <XAxis dataKey="day_number" stroke={isDark ? '#71717a' : '#a1a1aa'} tick={{ fontSize: 10 }} />
+                    <YAxis stroke="#22c55e" tick={{ fontSize: 10 }} />
                     <RechartsTooltip
                       contentStyle={{ 
                         backgroundColor: isDark ? '#18181b' : '#ffffff', 
@@ -298,27 +298,27 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
           </div>
 
           {/* 24-Hour Smart Irrigation Windows Table */}
-          <div className={`border rounded-xl p-6 transition-colors space-y-3 ${cardCls}`}>
+          <div className={`border rounded-xl p-4 sm:p-6 transition-colors space-y-3 ${cardCls}`}>
             <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-blue-500" />
-                <h4 className="font-semibold text-sm tracking-tight">Optimal Low-Loss Irrigation Windows</h4>
+                <Clock className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <h4 className="font-semibold text-xs sm:text-sm tracking-tight truncate">Smart Irrigation Windows</h4>
               </div>
-              <span className="text-xs text-green-500 font-medium">
-                Dawn & Nocturnal Windows Recommended
+              <span className="text-[11px] text-green-500 font-medium whitespace-nowrap">
+                Optimal Windows
               </span>
             </div>
 
-            <div className="overflow-x-auto max-h-60 overflow-y-auto">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto max-h-60 overflow-y-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+              <table className="w-full text-left text-xs min-w-[500px]">
                 <thead className={`sticky top-0 z-10 ${isDark ? 'bg-zinc-900' : 'bg-white'}`}>
                   <tr className={`border-b ${isDark ? 'border-zinc-800 text-zinc-400' : 'border-zinc-200 text-zinc-500'}`}>
-                    <th className="pb-3 font-medium">Time Window</th>
-                    <th className="pb-3 font-medium">Micro Temp</th>
-                    <th className="pb-3 font-medium">Solar Irradiance</th>
-                    <th className="pb-3 font-medium">ET₀ Loss Rate</th>
-                    <th className="pb-3 font-medium">Evaporation Risk</th>
-                    <th className="pb-3 font-medium">Water Efficiency</th>
+                    <th className="pb-3 font-medium">Window</th>
+                    <th className="pb-3 font-medium">Temp</th>
+                    <th className="pb-3 font-medium">Solar GHI</th>
+                    <th className="pb-3 font-medium">ET₀ Loss</th>
+                    <th className="pb-3 font-medium">Risk</th>
+                    <th className="pb-3 font-medium">Efficiency</th>
                     <th className="pb-3 font-medium">Advisory</th>
                   </tr>
                 </thead>
@@ -347,10 +347,10 @@ export const AgricultureDashboard: React.FC<AgricultureDashboardProps> = ({
                         {w.is_recommended_window ? (
                           <span className="text-green-500 font-semibold flex items-center gap-1">
                             <Sparkles className="w-3 h-3" />
-                            OPTIMAL WINDOW
+                            OPTIMAL
                           </span>
                         ) : (
-                          <span className={isDark ? 'text-zinc-500' : 'text-zinc-400'}>Suboptimal Loss</span>
+                          <span className={isDark ? 'text-zinc-500' : 'text-zinc-400'}>Suboptimal</span>
                         )}
                       </td>
                     </tr>
